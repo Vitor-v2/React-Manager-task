@@ -1,12 +1,15 @@
-import NavSide from "./components/SideBar";
+import NavSide from './components/SideBar'
+import HeaderTask from './components/HeaderTask'
 
 function App() {
-  return (
-    <>
-      <NavSide/>
-      {/* <Task /> */}
-    </>
-  );
+    return (
+        <>
+            <div className="flex">
+                <NavSide />
+                <HeaderTask />
+            </div>
+        </>
+    )
 }
 
-export default App;
+export default App
