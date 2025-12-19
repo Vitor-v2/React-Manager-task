@@ -12,7 +12,6 @@ function SideBarButtons({ icon, children, variant, url }) {
             href={url}
             className={`fw-auto flex h-10 items-center gap-2 pl-3 font-[nunito] transition delay-50 duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 ${getVariantClass()}`}
         >
-            {' '}
             {icon} {children}
         </a>
     )
