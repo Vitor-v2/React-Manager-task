@@ -1,6 +1,5 @@
-import NavSide from './components/SideBar'
 import HeaderTask from './components/HeaderTask'
-import { Toaster } from 'sonner'
+import NavSide from './components/SideBar'
 
 function App() {
     return (

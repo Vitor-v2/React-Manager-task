@@ -1,9 +1,8 @@
 import CheckIcon from '../assets/check.svg?react'
-import LoaderIcon from '../assets/loader.svg?react'
 import ShareIcon from '../assets/IconShare.svg?react'
 import TrashIcon from '../assets/IconTrash.svg?react'
+import LoaderIcon from '../assets/loader.svg?react'
 import Button from './Button'
-import { Toaster } from 'sonner'
 
 const TaskItem = ({ task, handleCheckBox, onDelete }) => {
     console.log(onDelete)

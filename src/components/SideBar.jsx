@@ -1,6 +1,6 @@
-import SideBarButtons from './SideBarButton'
 import IconHome from '../assets/IconHome.svg?react'
 import IconList from '../assets/IconList.svg?react'
+import SideBarButtons from './SideBarButton'
 
 function SideBar(props) {
     return (
