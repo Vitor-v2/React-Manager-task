@@ -1,4 +1,4 @@
-const Button = ({ children, variant = 'primary' }) => {
+const Button = ({ children, variant = 'primary', ...rest }) => {
     const defaultButton = () => {
         if (variant === 'primary') {
             return 'bg-cyan-500 text-white'
@@ -12,6 +12,7 @@ const Button = ({ children, variant = 'primary' }) => {
         <button
             type="button"
             className={`flex w-auto cursor-pointer items-center justify-items-center gap-1 rounded-sm px-2 py-1 text-base font-bold transition delay-50 duration-300 ease-in-out hover:opacity-80 ${defaultButton()}`}
+            {...rest}
         >
             {children}
         </button>

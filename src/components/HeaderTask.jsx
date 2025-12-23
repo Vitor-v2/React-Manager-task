@@ -1,22 +1,58 @@
 import Button from './Button'
-import IconAdd from '../assets/IconAdd.svg?react'
-import IconTrash from '../assets/IconTrash.svg?react'
-import IconSun from '../assets/IconSun.svg?react'
-import IconFoggy from '../assets/IconFoggy.svg?react'
-import IconMoon from '../assets/IconMoon.svg?react'
-import TaskSeparate from './TaskSeparate'
+import {
+    IconAdd,
+    IconTrash,
+    IconSun,
+    IconFoggy,
+    IconMoon,
+} from '../assets/Icons.js'
 import { useState } from 'react'
+import TaskSeparate from '../components/TaskSeparate.jsx'
 import Tasks from '../data/taskData'
 import TaskItem from './TaskItem'
+import { toast, Toaster } from 'sonner'
 
 const Task = () => {
-    const [tasks, setTasks] = useState(Tasks)
+    const [tasks, setTask] = useState(Tasks)
     const morningTask = tasks.filter((task) => task.period === 'morning')
     const eveningTask = tasks.filter((task) => task.period === 'evening')
     const afternoonTask = tasks.filter((task) => task.period === 'afternoon')
 
+    const HandleClickCheckBox = (tasksId) => {
+        const newTask = tasks.map((task) => {
+            if (tasksId !== task.id) {
+                return task
+            }
+
+            if (task.status === 'done') {
+                return { ...task, status: 'in_progress' }
+            }
+            if (task.status === 'in_progress') {
+                return { ...task, status: 'not_started' }
+            }
+            if (task.status === 'not_started') {
+                return { ...task, status: 'done' }
+            }
+            return { ...task, status: 'done' }
+        })
+
+        setTask(newTask)
+    }
+
+    const deletedItem = (taskId) => {
+        const deletedtask = tasks.filter((task) => taskId !== task.id)
+        setTask(deletedtask)
+        toast.success('Item deletado com sucesso!')
+    }
+
     return (
         <div className="flex h-screen w-screen flex-col gap-5 bg-[#f0f4f6] px-5 pt-10">
+            <Toaster
+                expand="true"
+                visibleToasts={1}
+                theme="system"
+                richColors="true"
+            />
             <div className="rounded-xl bg-white p-5">
                 <p className="font-[Poppins] text-sm text-cyan-500">
                     Minhas tarefas
@@ -42,19 +78,34 @@ const Task = () => {
                 <div className="flex flex-col gap-2">
                     <TaskSeparate img={<IconSun />}> Manhã</TaskSeparate>
                     {morningTask.map((task, index) => (
-                        <TaskItem key={index} task={task} />
+                        <TaskItem
+                            key={index}
+                            task={task}
+                            handleCheckBox={HandleClickCheckBox}
+                            onDelete={deletedItem}
+                        />
                     ))}
                 </div>
                 <div className="flex flex-col gap-2">
                     <TaskSeparate img={<IconFoggy />}> Tarde</TaskSeparate>
                     {afternoonTask.map((task, index) => (
-                        <TaskItem key={index} task={task} />
+                        <TaskItem
+                            key={index}
+                            task={task}
+                            handleCheckBox={HandleClickCheckBox}
+                            onDelete={deletedItem}
+                        />
                     ))}
                 </div>
                 <div className="flex flex-col gap-2">
                     <TaskSeparate img={<IconMoon />}> Noite</TaskSeparate>
                     {eveningTask.map((task, index) => (
-                        <TaskItem key={index} task={task} />
+                        <TaskItem
+                            key={index}
+                            task={task}
+                            handleCheckBox={HandleClickCheckBox}
+                            onDelete={deletedItem}
+                        />
                     ))}
                 </div>
             </div>
