@@ -12,7 +12,7 @@ function SideBar(props) {
                             Task Manager
                         </h4>
                         <p className="pl-3 font-[Poppins] text-xs">
-                            Um simples{' '}
+                            Um simples
                             <span className="font-bold text-cyan-800">
                                 organizador de tarefas
                             </span>

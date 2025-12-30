@@ -5,11 +5,9 @@ import LoaderIcon from '../assets/loader.svg?react'
 import Button from './Button'
 
 const TaskItem = ({ task, handleCheckBox, onDelete }) => {
-    console.log(onDelete)
-
     const statusClasses = () => {
         if (task.status === 'done') {
-            return 'bg-green-400/55'
+            return 'bg-green-400/50 '
         }
         if (task.status === 'in_progress') {
             return 'bg-yellow-400/50'

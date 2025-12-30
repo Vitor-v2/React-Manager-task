@@ -4,7 +4,7 @@ import NavSide from './components/SideBar'
 function App() {
     return (
         <>
-            <div className="flex">
+            <div id="page" className="flex">
                 <NavSide />
                 <HeaderTask />
             </div>
