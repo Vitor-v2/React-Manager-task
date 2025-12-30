@@ -1,43 +1,52 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CSSTransition } from 'react-transition-group'
 import { toast, Toaster } from 'sonner'
+import { v7 as uuidv7 } from 'uuid'
 
 import Button from './Button'
 import InputLabel from './InputLabel'
+import SelectTime from './SelectTime'
 
-const CreateDialog = ({ isOpen }) => {
-    const { openDialog, setopenDialog } = isOpen
+const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
+    const [nameTask, setnameTask] = useState('')
+    const [periodTask, setperiodTask] = useState('morning')
+    const [descriptionTask, setdescriptionTask] = useState('')
     const nodeRef = useRef()
-    const newTask = () => {
-        const transition = {
-            Manhã: 'morning',
-            Tarde: 'afternoon',
-            Noite: 'evening',
+
+    useEffect(() => {
+        if (!isOpen) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setnameTask('')
+            setperiodTask('morning')
+            setdescriptionTask('')
+        }
+    }, [isOpen])
+
+    const HandleCloseTask = () => {
+        HandleClickClose(false)
+    }
+
+    const HandleSaveTask = () => {
+        if (!nameTask.trim() || !descriptionTask.trim()) {
+            return toast.warning('Preencha todos os campos')
         }
 
-        let nameTask = document.getElementById('nameTask').value
-        const periodTask = document.getElementById('hourTask').value
-        let descriptionTask = document.getElementById('descriptionTask').value
-
-        if (!transition[periodTask]) return toast.error('Valor inválido')
-        const task = {
+        HandleAddtask({
+            id: uuidv7(),
             title: nameTask,
             description: descriptionTask,
-            period: transition[periodTask],
-        }
-        console.log(task)
-        document.getElementById('nameTask').value = ''
-        document.getElementById('descriptionTask').value = ''
-        toast.success('Enviado com sucesso!!')
-        setopenDialog(false)
+            period: periodTask,
+            status: 'not_started',
+        })
+
+        HandleCloseTask()
     }
 
     return (
         <CSSTransition
             nodeRef={nodeRef}
-            in={openDialog}
-            timeout={400}
+            in={isOpen}
             classNames="animate-add-dialog"
             unmountOnExit
         >
@@ -69,22 +78,19 @@ const CreateDialog = ({ isOpen }) => {
                                         type="text"
                                         id="nameTask"
                                         className="w-full border-1 border-solid border-black/20 p-1.5 font-[Poppins]"
+                                        value={nameTask}
+                                        onChange={(event) =>
+                                            setnameTask(event.target.value)
+                                        }
+                                        placeholder="Digite o nome da tarefa"
                                     />
                                 </div>
-                                <div className="gap-5 text-start">
-                                    <InputLabel htmlFor="periodTask">
-                                        Período:
-                                    </InputLabel>
-                                    <select
-                                        id="hourTask"
-                                        placeholder="Selecione o período"
-                                        className="w-full border-1 border-solid border-black/20 p-1.5 font-[Poppins]"
-                                    >
-                                        <option value="Manhã">Manhã</option>
-                                        <option value="Tarde">Tarde</option>
-                                        <option value="Noite">Noite</option>
-                                    </select>
-                                </div>
+                                <SelectTime
+                                    value={periodTask}
+                                    onChange={(event) =>
+                                        setperiodTask(event.target.value)
+                                    }
+                                />
                                 <div>
                                     <InputLabel htmlFor="descriptionTask">
                                         Descrição:
@@ -93,6 +99,13 @@ const CreateDialog = ({ isOpen }) => {
                                         type="text"
                                         id="descriptionTask"
                                         className="w-full border-1 border-solid border-black/20 p-1.5 font-[Poppins]"
+                                        value={descriptionTask}
+                                        onChange={(event) =>
+                                            setdescriptionTask(
+                                                event.target.value
+                                            )
+                                        }
+                                        placeholder="Digite o nome a descrição tarefa"
                                     />
                                 </div>
                             </div>
@@ -102,7 +115,7 @@ const CreateDialog = ({ isOpen }) => {
                                     size="md"
                                     type="button"
                                     onClick={() => {
-                                        setopenDialog(false)
+                                        HandleCloseTask()
                                     }}
                                 >
                                     Cancelar
@@ -110,7 +123,9 @@ const CreateDialog = ({ isOpen }) => {
                                 <Button
                                     size="md"
                                     type="button"
-                                    onClick={() => newTask()}
+                                    onClick={() => {
+                                        HandleSaveTask()
+                                    }}
                                 >
                                     Adicionar
                                 </Button>

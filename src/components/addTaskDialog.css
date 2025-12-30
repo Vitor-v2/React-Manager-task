@@ -10,5 +10,5 @@
 }
 .animate-add-dialog-exit-active {
   opacity: 0;
-  transition: opacity 400ms;
+  transition: opacity 500ms;
 }

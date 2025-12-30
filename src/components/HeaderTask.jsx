@@ -38,7 +38,6 @@ const Task = () => {
             }
             return { ...task, status: 'done' }
         })
-
         setTask(newTask)
     }
 
@@ -46,6 +45,11 @@ const Task = () => {
         const deletedtask = tasks.filter((task) => taskId !== task.id)
         setTask(deletedtask)
         toast.success('Item deletado com sucesso!')
+    }
+
+    const addTask = (newTask) => {
+        setTask([...tasks, newTask])
+        toast.success('Tarefa adicionada com sucesso')
     }
 
     return (
@@ -115,11 +119,9 @@ const Task = () => {
                 </div>
             </div>
             <CreateDialog
-                isOpen={{
-                    openDialog: openDialog,
-                    setopenDialog: setopenDialog,
-                }}
-                addTask={setTask}
+                isOpen={openDialog}
+                HandleClickClose={setopenDialog}
+                HandleAddtask={addTask}
             />
         </>
     )
