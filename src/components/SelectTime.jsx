@@ -14,6 +14,11 @@ const SelectTime = (props) => {
                 <option value="afternoon">Tarde</option>
                 <option value="evening">Noite</option>
             </select>
+            {props?.error && (
+                <span className="text-start text-sm text-red-500">
+                    {props?.erro.message}
+                </span>
+            )}
         </div>
     )
 }

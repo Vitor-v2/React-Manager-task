@@ -4,7 +4,6 @@ const InputLabel = (props) => {
             className="font-[Poppins] text-sm font-semibold text-black"
             {...props}
         >
-            {' '}
             {props.children}
         </label>
     )
