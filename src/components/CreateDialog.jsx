@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CSSTransition } from 'react-transition-group'
 import { Toaster } from 'sonner'
@@ -6,27 +6,14 @@ import { v7 as uuidv7 } from 'uuid'
 
 import Button from './Button'
 import InputDialog from './Input'
-import InputLabel from './InputLabel'
 import SelectTime from './SelectTime'
 
 const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
-    const [nameTask, setnameTask] = useState('')
-    const [periodTask, setperiodTask] = useState('morning')
-    const [descriptionTask, setdescriptionTask] = useState('')
     const [errorsTask, seterrorsTask] = useState([])
     const nodeRef = useRef()
-
-    useEffect(() => {
-        if (!isOpen) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setnameTask('')
-            setperiodTask('morning')
-            setdescriptionTask('')
-            seterrorsTask([])
-        }
-    }, [isOpen])
-
-    console.log(errorsTask)
+    const nameTask = useRef()
+    const periodTask = useRef()
+    const descriptionTask = useRef()
 
     const HandleCloseTask = () => {
         HandleClickClose(false)
@@ -35,21 +22,21 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
     const HandleSaveTask = () => {
         const newErrors = []
 
-        if (!nameTask.trim()) {
+        if (!nameTask.current.value.trim()) {
             newErrors.push({
                 inputError: 'name',
                 message: 'O nome da tarefa não pode estar vazio.',
             })
         }
 
-        if (!periodTask.trim()) {
+        if (!periodTask.current.value.trim()) {
             newErrors.push({
                 inputError: 'period',
                 message: 'O período da tarefa não pode estar vazio.',
             })
         }
 
-        if (!descriptionTask.trim()) {
+        if (!descriptionTask.current.value.trim()) {
             newErrors.push({
                 inputError: 'description',
                 message: 'A descrição não pode estar vazia.',
@@ -60,12 +47,12 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
             seterrorsTask(newErrors)
             return
         }
-
+        console.log(nameTask.current)
         HandleAddtask({
             id: uuidv7(),
-            title: nameTask,
-            description: descriptionTask,
-            period: periodTask,
+            title: nameTask.current.value,
+            description: descriptionTask.current.value,
+            period: periodTask.current.value,
             status: 'not_started',
         })
 
@@ -112,19 +99,13 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                                         label={'Nome da Tarefa: '}
                                         id="nameTask"
                                         className="w-full border-1 border-solid border-black/20 p-1.5 font-[Poppins]"
-                                        value={nameTask}
                                         placeholder="Digite o nome da tarefa"
                                         error={errorName}
-                                        onChange={(event) =>
-                                            setnameTask(event.target.value)
-                                        }
+                                        ref={nameTask}
                                     />
                                 </div>
                                 <SelectTime
-                                    value={periodTask}
-                                    onChange={(event) =>
-                                        setperiodTask(event.target.value)
-                                    }
+                                    ref={periodTask}
                                     error={errorPeriod}
                                 />
 
@@ -132,14 +113,9 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                                     <InputDialog
                                         label="Descrição: "
                                         id="descriptionTask"
-                                        value={descriptionTask}
+                                        ref={descriptionTask}
                                         placeholder="Digite o nome a descrição tarefa"
                                         error={errorDescription}
-                                        onChange={(event) =>
-                                            setdescriptionTask(
-                                                event.target.value
-                                            )
-                                        }
                                     />
                                 </div>
                             </div>
