@@ -80,7 +80,7 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                 {createPortal(
                     <div
                         ref={nodeRef}
-                        className="fixed top-0 bottom-0 flex h-screen w-screen items-center justify-center backdrop-blur-xs"
+                        className="fixed top-0 bottom-0 flex h-screen w-screen items-center justify-center backdrop-blur-md"
                     >
                         <Toaster
                             expand="true"
@@ -88,7 +88,7 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                             theme="system"
                             richColors="true"
                         />
-                        <div className="flex size-[500px] flex-col items-center justify-center gap-5 rounded-4xl bg-white px-5">
+                        <div className="flex size-auto flex-col items-center justify-center gap-5 rounded-4xl bg-gray-50 py-10">
                             <div className="text-center">
                                 <h1 className="bg-teste font-[Poppins] text-4xl">
                                     Nova tarefa

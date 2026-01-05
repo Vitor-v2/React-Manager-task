@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast, Toaster } from 'sonner'
 
 import {
@@ -9,17 +9,28 @@ import {
     IconTrash,
 } from '../assets/Icons.js'
 import TaskSeparate from '../components/TaskSeparate.jsx'
-import Tasks from '../data/taskData'
 import Button from './Button'
 import CreateDialog from './CreateDialog.jsx'
 import TaskItem from './TaskItem'
 
 const Task = () => {
-    const [tasks, setTask] = useState(Tasks)
+    const [tasks, setTask] = useState([])
     const [openDialog, setopenDialog] = useState(false)
     const morningTask = tasks.filter((task) => task.period === 'morning')
     const eveningTask = tasks.filter((task) => task.period === 'evening')
     const afternoonTask = tasks.filter((task) => task.period === 'afternoon')
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetch('http://localhost:3000/tasks', {
+                method: 'GET',
+            })
+
+            const result = await data.json()
+            setTask(result)
+        }
+        fetchData()
+    }, [])
 
     const HandleClickCheckBox = (tasksId) => {
         const newTask = tasks.map((task) => {
