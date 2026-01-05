@@ -54,7 +54,7 @@ const Task = () => {
 
     return (
         <>
-            <div className="flex h-screen w-screen flex-col gap-5 bg-[#f0f4f6] px-5 pt-10">
+            <div className="bg-background-task flex h-screen w-screen flex-col gap-5 px-5 pt-10">
                 <Toaster
                     expand="true"
                     visibleToasts={1}
@@ -62,7 +62,7 @@ const Task = () => {
                     richColors="true"
                 />
                 <div className="rounded-xl bg-white p-5">
-                    <p className="font-[Poppins] text-sm text-cyan-500">
+                    <p className="text-primary-color font-[Poppins] text-sm">
                         Minhas tarefas
                     </p>
                     <div className="flex justify-between">

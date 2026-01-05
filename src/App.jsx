@@ -1,3 +1,5 @@
+import './index.css'
+
 import HeaderTask from './components/HeaderTask'
 import NavSide from './components/SideBar'
 

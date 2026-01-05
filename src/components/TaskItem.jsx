@@ -45,6 +45,7 @@ const TaskItem = ({ task, handleCheckBox, onDelete }) => {
                 <div className="flex content-center gap-5">
                     <Button
                         key={task.id}
+                        variant="ghost"
                         type="button"
                         onClick={() => {
                             onDelete(task.id)

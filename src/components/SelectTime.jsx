@@ -7,7 +7,7 @@ const SelectTime = (props) => {
             <select
                 id="hourTask"
                 placeholder="Selecione o período"
-                className="w-full border-1 border-solid border-black/20 p-1.5 font-[Poppins]"
+                className="w-full border border-solid border-black/20 p-1.5 font-[Poppins]"
                 {...props}
             >
                 <option value="morning">Manhã</option>

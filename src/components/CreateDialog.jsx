@@ -17,6 +17,7 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
 
     const HandleCloseTask = () => {
         HandleClickClose(false)
+        seterrorsTask([])
     }
 
     const HandleSaveTask = () => {
@@ -43,11 +44,12 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
             })
         }
 
+        seterrorsTask(newErrors)
+
         if (newErrors.length > 0) {
-            seterrorsTask(newErrors)
             return
         }
-        console.log(nameTask.current)
+
         HandleAddtask({
             id: uuidv7(),
             title: nameTask.current.value,
@@ -88,17 +90,16 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                         />
                         <div className="flex size-[500px] flex-col items-center justify-center gap-5 rounded-4xl bg-white px-5">
                             <div className="text-center">
-                                <h1 className="font-[Poppins] text-4xl">
+                                <h1 className="bg-teste font-[Poppins] text-4xl">
                                     Nova tarefa
                                 </h1>
                                 <p>Insira as informações abaixo</p>
                             </div>
-                            <div className="flex flex-col gap-1">
+                            <div className="flex flex-col gap-1 px-15">
                                 <div className="gap-5 text-start">
                                     <InputDialog
-                                        label={'Nome da Tarefa: '}
+                                        label="Nome da Tarefa: "
                                         id="nameTask"
-                                        className="w-full border-1 border-solid border-black/20 p-1.5 font-[Poppins]"
                                         placeholder="Digite o nome da tarefa"
                                         error={errorName}
                                         ref={nameTask}
@@ -121,7 +122,7 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                             </div>
                             <div className="flex w-100 items-center justify-around gap-5 p-1.5">
                                 <Button
-                                    variant="ghost"
+                                    variant="secondary"
                                     size="md"
                                     type="button"
                                     onClick={() => {
@@ -131,6 +132,7 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                                     Cancelar
                                 </Button>
                                 <Button
+                                    variant="primary"
                                     size="md"
                                     type="button"
                                     onClick={() => {

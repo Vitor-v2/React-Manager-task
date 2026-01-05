@@ -1,25 +1,31 @@
-const Button = ({ children, variant = 'primary', size = 'sm', ...rest }) => {
-    const defaultButton = () => {
-        if (variant === 'primary') {
-            return 'bg-cyan-500 text-white ease-in-out hover:opacity-80'
-        }
-        if (variant === 'ghost') {
-            return 'text-gray-500 border-transparent hover:border-gray-500/75 hover:border'
-        }
-    }
-    const defaultSize = () => {
-        if (size === 'sm') {
-            return 'px-2 py-1'
-        }
-        if (size === 'md') {
-            return 'px-10 py-5'
-        }
-    }
+import { tv } from 'tailwind-variants'
+
+const Button = ({ children, variant, size, className, ...rest }) => {
+    const button = tv({
+        base: 'flex w-auto cursor-pointer items-center justify-items-center gap-1 rounded-sm text-base font-bold duration-700',
+        variants: {
+            variant: {
+                primary:
+                    'bg-primary-color text-white ease-in-out hover:opacity-80',
+                ghost: 'text-gray-500 border-transparent hover:border-gray-500/75 hover:border',
+                secondary:
+                    'bg-gray-500 text-white ease-in-out hover:opacity-80 border-black',
+            },
+            size: {
+                sm: 'px-2 py-1',
+                md: 'px-10 py-4',
+            },
+        },
+        defaultVariants: {
+            variant: 'primary',
+            size: 'sm',
+        },
+    })
 
     return (
         <button
             type="button"
-            className={`flex w-auto cursor-pointer items-center justify-items-center gap-1 rounded-sm text-base font-bold duration-700 ${defaultButton()} ${defaultSize()}`}
+            className={button({ variant, size, className })}
             {...rest}
         >
             {children}
