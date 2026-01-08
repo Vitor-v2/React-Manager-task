@@ -4,10 +4,10 @@ import TrashIcon from '../assets/IconTrash.svg?react'
 import LoaderIcon from '../assets/loader.svg?react'
 import Button from './Button'
 
-const TaskItem = ({ task, handleCheckBox, onDelete }) => {
+const TaskItem = ({ task, handleCheckBox, onDelete, reloadingIcon }) => {
     const statusClasses = () => {
         if (task.status === 'done') {
-            return 'bg-green-400/50 '
+            return 'bg-green-400/50'
         }
         if (task.status === 'in_progress') {
             return 'bg-yellow-400/50'
@@ -52,7 +52,11 @@ const TaskItem = ({ task, handleCheckBox, onDelete }) => {
                         }}
                         className="cursor-pointer"
                     >
-                        <TrashIcon className="text-black/60" />
+                        {reloadingIcon ? (
+                            <LoaderIcon className="animate-spin" />
+                        ) : (
+                            <TrashIcon className="text-black/60" />
+                        )}
                     </Button>
                     <a href="#">
                         <ShareIcon className="text-black/60" />

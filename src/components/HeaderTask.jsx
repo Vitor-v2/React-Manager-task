@@ -16,6 +16,7 @@ import TaskItem from './TaskItem'
 const Task = () => {
     const [tasks, setTask] = useState([])
     const [openDialog, setopenDialog] = useState(false)
+    const [reloadingIcon, setreloadingIcon] = useState(false)
     const morningTask = tasks.filter((task) => task.period === 'morning')
     const eveningTask = tasks.filter((task) => task.period === 'evening')
     const afternoonTask = tasks.filter((task) => task.period === 'afternoon')
@@ -25,8 +26,8 @@ const Task = () => {
             const data = await fetch('http://localhost:3000/tasks', {
                 method: 'GET',
             })
-
             const result = await data.json()
+
             setTask(result)
         }
         fetchData()
@@ -52,15 +53,34 @@ const Task = () => {
         setTask(newTask)
     }
 
-    const deletedItem = (taskId) => {
+    const deletedItem = async (taskId) => {
+        setreloadingIcon(true)
+
+        if (!taskId) {
+            toast.error('Erro ao deletar, é necessário 1 ID')
+            setreloadingIcon(false)
+        }
+
         const deletedtask = tasks.filter((task) => taskId !== task.id)
         setTask(deletedtask)
+
+        await fetch(`http://localhost:3000/tasks/${taskId}`, {
+            method: 'DELETE',
+        })
         toast.success('Item deletado com sucesso!')
+        setreloadingIcon(false)
     }
 
-    const addTask = (newTask) => {
-        setTask([...tasks, newTask])
-        toast.success('Tarefa adicionada com sucesso')
+    const addTask = async (newTask) => {
+        const submitTask = await fetch('http://localhost:3000/tasks', {
+            method: 'POST',
+            body: JSON.stringify(newTask),
+        })
+
+        const result = await submitTask.json()
+
+        setTask([...tasks, result])
+        toast.success('Tarefa adicionada!')
     }
 
     return (
@@ -102,6 +122,7 @@ const Task = () => {
                                 task={task}
                                 handleCheckBox={HandleClickCheckBox}
                                 onDelete={deletedItem}
+                                reloadingIcon={reloadingIcon}
                             />
                         ))}
                     </div>
@@ -113,6 +134,7 @@ const Task = () => {
                                 task={task}
                                 handleCheckBox={HandleClickCheckBox}
                                 onDelete={deletedItem}
+                                reloadingIcon={reloadingIcon}
                             />
                         ))}
                     </div>
@@ -124,6 +146,7 @@ const Task = () => {
                                 task={task}
                                 handleCheckBox={HandleClickCheckBox}
                                 onDelete={deletedItem}
+                                reloadingIcon={reloadingIcon}
                             />
                         ))}
                     </div>
