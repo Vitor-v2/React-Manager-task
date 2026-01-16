@@ -51,6 +51,7 @@ const TaskItem = ({ task, handleCheckBox, onDelete, reloadingIcon }) => {
                             onDelete(task.id)
                         }}
                         className="cursor-pointer"
+                        disabled={reloadingIcon}
                     >
                         {reloadingIcon ? (
                             <LoaderIcon className="animate-spin" />

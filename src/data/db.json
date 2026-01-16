@@ -1,34 +1,6 @@
 {
   "tasks": [
     {
-      "id": "2",
-      "title": "Ler livro",
-      "description": "Ler o livro de matemática",
-      "period": "afternoon",
-      "status": "in_progress"
-    },
-    {
-      "id": "3",
-      "title": "Treinar",
-      "description": "Fazer exercícios na academia",
-      "period": "afternoon",
-      "status": "done"
-    },
-    {
-      "id": "5",
-      "title": "Descansar",
-      "description": "Assistir um filme com a família",
-      "period": "evening",
-      "status": "not_started"
-    },
-    {
-      "id": "7",
-      "title": "Reunião de equipe",
-      "description": "Participar da reunião semanal",
-      "period": "afternoon",
-      "status": "in_progress"
-    },
-    {
       "id": "9",
       "title": "Preparar apresentação",
       "description": "Criar slides para a apresentação",
@@ -92,24 +64,17 @@
       "status": "not_started"
     },
     {
-      "id": "019b95fe-e765-722d-a9eb-755692996d96",
-      "title": "asdasd",
-      "description": "asdasd",
-      "period": "morning",
+      "id": "019bc4ba-6a2e-758e-8333-0bac0543f0d1",
+      "title": "aaa",
+      "period": "afternoon",
+      "description": "asdasdasdasd",
       "status": "not_started"
     },
     {
-      "id": "019b9b81-242e-75c8-b753-ca47e4d2227e",
+      "id": "019bc4c7-b885-74f6-9cd1-8173a6baaa09",
       "title": "asdasd",
-      "description": "asdasd",
       "period": "morning",
-      "status": "not_started"
-    },
-    {
-      "id": "019b9b81-407e-773b-a047-a0406545d428",
-      "title": "aa",
-      "description": "aaaa",
-      "period": "morning",
+      "description": "asdasdasdasd",
       "status": "not_started"
     }
   ]

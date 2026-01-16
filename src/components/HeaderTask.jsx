@@ -71,15 +71,8 @@ const Task = () => {
         setreloadingIcon(false)
     }
 
-    const addTask = async (newTask) => {
-        const submitTask = await fetch('http://localhost:3000/tasks', {
-            method: 'POST',
-            body: JSON.stringify(newTask),
-        })
-
-        const result = await submitTask.json()
-
-        setTask([...tasks, result])
+    const taskSubmit = (task) => {
+        setTask([...tasks, task])
         toast.success('Tarefa adicionada!')
     }
 
@@ -155,7 +148,7 @@ const Task = () => {
             <CreateDialog
                 isOpen={openDialog}
                 HandleClickClose={setopenDialog}
-                HandleAddtask={addTask}
+                taskSubmit={taskSubmit}
             />
         </>
     )

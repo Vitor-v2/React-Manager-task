@@ -5,15 +5,16 @@ const Button = ({ children, variant, size, className, ...rest }) => {
         base: 'flex w-auto cursor-pointer items-center justify-items-center gap-1 rounded-sm text-base font-bold duration-700',
         variants: {
             variant: {
-                primary:
-                    'bg-primary-color text-white ease-in-out hover:opacity-80',
+                primary: 'bg-primary-color text-white hover:opacity-70',
                 ghost: 'text-gray-500 border-transparent hover:border-gray-500/75 hover:border',
-                secondary:
-                    'bg-gray-500 text-white ease-in-out hover:opacity-80 border-black',
+                secondary: 'bg-gray-500 text-white ease-in-out border-black',
             },
             size: {
                 sm: 'px-2 py-1',
                 md: 'px-10 py-4',
+            },
+            disabled: {
+                true: 'opacity-70 cursor-not-allowed',
             },
         },
         defaultVariants: {
@@ -25,7 +26,12 @@ const Button = ({ children, variant, size, className, ...rest }) => {
     return (
         <button
             type="button"
-            className={button({ variant, size, className })}
+            className={button({
+                variant,
+                size,
+                disabled: rest.disabled,
+                className,
+            })}
             {...rest}
         >
             {children}

@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { CSSTransition } from 'react-transition-group'
-import { Toaster } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import { v7 as uuidv7 } from 'uuid'
 
+import LoaderIcon from '../assets/loader.svg?react'
 import Button from './Button'
 import InputDialog from './Input'
 import SelectTime from './SelectTime'
 
-const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
+const CreateDialog = ({ isOpen, HandleClickClose, taskSubmit }) => {
     const [errorsTask, seterrorsTask] = useState([])
+    const [isLoading, setisLoading] = useState(false)
     const nodeRef = useRef()
     const nameTask = useRef()
     const periodTask = useRef()
@@ -20,24 +22,27 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
         seterrorsTask([])
     }
 
-    const HandleSaveTask = () => {
+    const HandleSaveTask = async () => {
         const newErrors = []
+        const title = nameTask.current.value
+        const period = periodTask.current.value
+        const description = descriptionTask.current.value
 
-        if (!nameTask.current.value.trim()) {
+        if (!title.trim()) {
             newErrors.push({
                 inputError: 'name',
                 message: 'O nome da tarefa não pode estar vazio.',
             })
         }
 
-        if (!periodTask.current.value.trim()) {
+        if (!period.trim()) {
             newErrors.push({
                 inputError: 'period',
                 message: 'O período da tarefa não pode estar vazio.',
             })
         }
 
-        if (!descriptionTask.current.value.trim()) {
+        if (!description.trim()) {
             newErrors.push({
                 inputError: 'description',
                 message: 'A descrição não pode estar vazia.',
@@ -50,15 +55,28 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
             return
         }
 
-        HandleAddtask({
+        setisLoading(true)
+        const task = {
             id: uuidv7(),
-            title: nameTask.current.value,
-            description: descriptionTask.current.value,
-            period: periodTask.current.value,
+            title,
+            period,
+            description,
             status: 'not_started',
+        }
+        const submitTask = await fetch('http://localhost:3000/tasks', {
+            method: 'POST',
+            body: JSON.stringify(task),
         })
 
-        HandleCloseTask()
+        const result = await submitTask.json()
+
+        if (!submitTask.ok) {
+            return toast.error('Erro ao criar a Tarefa ')
+        }
+
+        taskSubmit(result)
+        setisLoading(false)
+        HandleClickClose()
     }
 
     const errorName = errorsTask.find((error) => error.inputError === 'name')
@@ -103,11 +121,13 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                                         placeholder="Digite o nome da tarefa"
                                         error={errorName}
                                         ref={nameTask}
+                                        disabled={isLoading}
                                     />
                                 </div>
                                 <SelectTime
                                     ref={periodTask}
                                     error={errorPeriod}
+                                    disabled={isLoading}
                                 />
 
                                 <div>
@@ -117,6 +137,7 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                                         ref={descriptionTask}
                                         placeholder="Digite o nome a descrição tarefa"
                                         error={errorDescription}
+                                        disabled={isLoading}
                                     />
                                 </div>
                             </div>
@@ -138,7 +159,11 @@ const CreateDialog = ({ isOpen, HandleClickClose, HandleAddtask }) => {
                                     onClick={() => {
                                         HandleSaveTask()
                                     }}
+                                    disabled={isLoading}
                                 >
+                                    {isLoading ? (
+                                        <LoaderIcon className="animate-spin text-white" />
+                                    ) : null}{' '}
                                     Adicionar
                                 </Button>
                             </div>

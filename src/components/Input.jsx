@@ -2,7 +2,7 @@ import InputLabel from './InputLabel'
 
 const InputDialog = ({ label, ...rest }) => {
     return (
-        <div>
+        <div className="w-100">
             <InputLabel htmlFor={rest.id}>{label}</InputLabel>
             <input
                 type="text"
