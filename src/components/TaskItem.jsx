@@ -1,10 +1,16 @@
+import { useState } from 'react'
+import { Link } from 'react-router'
+import { toast } from 'sonner'
+
 import CheckIcon from '../assets/check.svg?react'
 import ShareIcon from '../assets/IconShare.svg?react'
 import TrashIcon from '../assets/IconTrash.svg?react'
 import LoaderIcon from '../assets/loader.svg?react'
 import Button from './Button'
 
-const TaskItem = ({ task, handleCheckBox, onDelete, reloadingIcon }) => {
+const TaskItem = ({ task, handleCheckBox, onDelete }) => {
+    const [deleteIsLoading, setdeleteIsLoading] = useState(false)
+
     const statusClasses = () => {
         if (task.status === 'done') {
             return 'bg-green-400/50'
@@ -15,6 +21,20 @@ const TaskItem = ({ task, handleCheckBox, onDelete, reloadingIcon }) => {
         if (task.status === 'not_started') {
             return 'bg-gray-400/50'
         }
+    }
+
+    const HandleDeleteItem = async () => {
+        setdeleteIsLoading(true)
+        const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+            method: 'DELETE',
+        })
+        if (!response.ok) {
+            setdeleteIsLoading(false)
+            return toast.error('Erro na ao excluir a tarefa')
+        }
+
+        onDelete(task.id)
+        setdeleteIsLoading(false)
     }
 
     return (
@@ -48,20 +68,20 @@ const TaskItem = ({ task, handleCheckBox, onDelete, reloadingIcon }) => {
                         variant="ghost"
                         type="button"
                         onClick={() => {
-                            onDelete(task.id)
+                            HandleDeleteItem()
                         }}
                         className="cursor-pointer"
-                        disabled={reloadingIcon}
+                        disabled={deleteIsLoading}
                     >
-                        {reloadingIcon ? (
+                        {deleteIsLoading ? (
                             <LoaderIcon className="animate-spin" />
                         ) : (
                             <TrashIcon className="text-black/60" />
                         )}
                     </Button>
-                    <a href="#">
+                    <Link to={`/task/${task.id}`}>
                         <ShareIcon className="text-black/60" />
-                    </a>
+                    </Link>
                 </div>
             </div>
         </>

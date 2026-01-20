@@ -8,13 +8,6 @@
       "status": "in_progress"
     },
     {
-      "id": "10",
-      "title": "Limpar a casa",
-      "description": "Fazer uma limpeza geral na casa",
-      "period": "evening",
-      "status": "not_started"
-    },
-    {
       "id": "11",
       "title": "Cozinhar",
       "description": "Preparar o jantar",
@@ -27,13 +20,6 @@
       "description": "Correr no parque",
       "period": "afternoon",
       "status": "done"
-    },
-    {
-      "id": "14",
-      "title": "Ler artigo",
-      "description": "Ler um artigo sobre tecnologia",
-      "period": "evening",
-      "status": "not_started"
     },
     {
       "id": "16",
