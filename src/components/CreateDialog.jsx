@@ -12,6 +12,7 @@ import SelectTime from './SelectTime'
 const CreateDialog = ({ isOpen, HandleClickClose, taskSubmit }) => {
     const [errorsTask, seterrorsTask] = useState([])
     const [isLoading, setisLoading] = useState(false)
+
     const nodeRef = useRef()
     const nameTask = useRef()
     const periodTask = useRef()
@@ -106,7 +107,7 @@ const CreateDialog = ({ isOpen, HandleClickClose, taskSubmit }) => {
                             theme="system"
                             richColors="true"
                         />
-                        <div className="flex size-auto flex-col items-center justify-center gap-5 rounded-4xl bg-gray-50 py-10">
+                        <div className="flex size-auto w-120 flex-col items-center justify-center gap-5 rounded-4xl bg-gray-50 py-10">
                             <div className="text-center">
                                 <h1 className="bg-teste font-[Poppins] text-4xl">
                                     Nova tarefa

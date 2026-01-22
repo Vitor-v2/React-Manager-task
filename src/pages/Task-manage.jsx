@@ -1,9 +1,7 @@
-import './index.css'
+import NavSide from '../components/SideBar'
+import Task from '../components/Task'
 
-import NavSide from './components/SideBar'
-import Task from './components/Task'
-
-function App() {
+function TaskManager() {
     return (
         <>
             <div id="page" className="flex">
@@ -14,4 +12,4 @@ function App() {
     )
 }
 
-export default App
+export default TaskManager

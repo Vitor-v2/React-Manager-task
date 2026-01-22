@@ -2,16 +2,20 @@ import { tv } from 'tailwind-variants'
 
 const Button = ({ children, variant, size, className, ...rest }) => {
     const button = tv({
-        base: 'flex w-auto cursor-pointer items-center justify-items-center gap-1 rounded-sm text-base font-bold duration-700',
+        base: 'flex justify-center items-center cursor-pointer gap-1 rounded-sm font-bold duration-700',
         variants: {
             variant: {
-                primary: 'bg-primary-color text-white hover:opacity-70',
+                primary:
+                    'bg-primary-color text-white text-center hover:opacity-70',
                 ghost: 'text-gray-500 border-transparent hover:border-gray-500/75 hover:border',
-                secondary: 'bg-gray-500 text-white ease-in-out border-black',
+                secondary:
+                    'bg-gray-300 text-black/60 ease-in-out hover:opacity-60',
+                danger: 'bg-red-500 text-white transition hover:opacity-60',
             },
             size: {
                 sm: 'px-2 py-1',
-                md: 'px-10 py-4',
+                md: 'px-10 py-2',
+                lg: 'px-20 py-2',
             },
             disabled: {
                 true: 'opacity-70 cursor-not-allowed',

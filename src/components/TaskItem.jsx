@@ -62,7 +62,7 @@ const TaskItem = ({ task, handleCheckBox, onDelete }) => {
                     </label>
                     {task.title}
                 </div>
-                <div className="flex content-center gap-5">
+                <div className="flex content-center items-center gap-5">
                     <Button
                         key={task.id}
                         variant="ghost"
@@ -79,7 +79,7 @@ const TaskItem = ({ task, handleCheckBox, onDelete }) => {
                             <TrashIcon className="text-black/60" />
                         )}
                     </Button>
-                    <Link to={`/task/${task.id}`}>
+                    <Link to={`/tasks/${task.id}`}>
                         <ShareIcon className="text-black/60" />
                     </Link>
                 </div>

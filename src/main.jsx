@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 
 import App from './App.jsx'
 import TaskDetailPage from './pages/task-details.jsx'
+import TaskManager from './pages/task-manage.jsx'
 
 const router = createBrowserRouter([
     {
@@ -13,7 +14,11 @@ const router = createBrowserRouter([
         element: <App />,
     },
     {
-        path: '/task/:taskId',
+        path: '/tasks',
+        element: <TaskManager />,
+    },
+    {
+        path: '/tasks/:taskId',
         element: <TaskDetailPage />,
     },
 ])

@@ -2,20 +2,22 @@ import InputLabel from './InputLabel'
 
 const InputDialog = ({ label, ...rest }) => {
     return (
-        <div className="w-100">
-            <InputLabel htmlFor={rest.id}>{label}</InputLabel>
-            <input
-                type="text"
-                id={rest.id}
-                className="w-full border border-solid border-black/20 p-1.5 font-[Poppins]"
-                {...rest}
-            />
-            {rest.error && (
-                <span className="text-sm text-red-500">
-                    {rest.error.message}
-                </span>
-            )}
-        </div>
+        <>
+            <div>
+                <InputLabel htmlFor={rest.id}>{label}</InputLabel>
+                <input
+                    type="text"
+                    id={rest.id}
+                    className="focus: outline-secondary-color w-full rounded-sm border border-solid border-black/20 p-1.5 font-[Poppins]"
+                    {...rest}
+                />
+                {rest.error && (
+                    <span className="py-10 text-sm text-red-500">
+                        {rest.error.message}
+                    </span>
+                )}
+            </div>
+        </>
     )
 }
 

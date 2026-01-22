@@ -19,11 +19,11 @@ function SideBar(props) {
                         </p>
                     </div>
                     <div className="mt-5 flex flex-col gap-5">
-                        <SideBarButtons url="#home" status="selected">
+                        <SideBarButtons url="/">
                             <IconHome />
                             Início
                         </SideBarButtons>
-                        <SideBarButtons url="#manageList" status="unselected">
+                        <SideBarButtons url="/tasks">
                             <IconList />
                             Gerenciar lista
                         </SideBarButtons>
