@@ -12,7 +12,7 @@ const InputDialog = ({ label, ...rest }) => {
                     {...rest}
                 />
                 {rest.error && (
-                    <span className="py-10 text-sm text-red-500">
+                    <span className="text-sm text-red-500">
                         {rest.error.message}
                     </span>
                 )}

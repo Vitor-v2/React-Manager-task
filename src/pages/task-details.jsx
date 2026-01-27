@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router'
 import { toast } from 'sonner'
@@ -11,13 +12,19 @@ import SideBar from '../components/SideBar'
 
 const TaskDetailPage = () => {
     const { taskId } = useParams()
-    const [errorsTask, seterrorsTask] = useState([])
-    const [isLoading, setisLoading] = useState(false)
     const [detailTask, setDetailTask] = useState()
-
-    const nameTask = useRef()
-    const periodTask = useRef()
-    const descriptionTask = useRef()
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+        reset,
+    } = useForm({
+        defaultValues: {
+            title: '',
+            period: 'morning',
+            description: '',
+        },
+    })
 
     const navigate = useNavigate()
 
@@ -35,45 +42,15 @@ const TaskDetailPage = () => {
             )
             const data = await result.json()
             setDetailTask(data)
+            reset(data)
         }
-
         fetchTask()
-    }, [taskId])
+    }, [taskId, reset])
 
-    const HandleSubmit = async () => {
-        const newErrors = []
-        const title = nameTask.current.value
-        const period = periodTask.current.value
-        const description = descriptionTask.current.value
-
-        if (!title.trim()) {
-            newErrors.push({
-                inputError: 'name',
-                message: 'O nome da tarefa não pode estar vazio.',
-            })
-        }
-
-        if (!period.trim()) {
-            newErrors.push({
-                inputError: 'period',
-                message: 'O período da tarefa não pode estar vazio.',
-            })
-        }
-
-        if (!description.trim()) {
-            newErrors.push({
-                inputError: 'description',
-                message: 'A descrição não pode estar vazia.',
-            })
-        }
-
-        seterrorsTask(newErrors)
-
-        if (newErrors.length > 0) {
-            return setisLoading(false)
-        }
-
-        setisLoading(true)
+    const HandleSubmit = async (data) => {
+        const title = data.title
+        const period = data.period
+        const description = data.description
 
         const submitTask = await fetch(
             `http://localhost:3000/tasks/${detailTask.id}`,
@@ -83,23 +60,13 @@ const TaskDetailPage = () => {
             }
         )
 
-        const data = await submitTask.json()
+        const response = await submitTask.json()
 
         if (!submitTask.ok) {
-            setisLoading(false)
             return toast.error('Erro ao atualizar a Tarefa ')
         }
-        setDetailTask(data)
-        setisLoading(false)
+        setDetailTask(response)
     }
-
-    const errorName = errorsTask.find((error) => error.inputError === 'name')
-    const errorPeriod = errorsTask.find(
-        (error) => error.inputError === 'period'
-    )
-    const errorDescription = errorsTask.find(
-        (error) => error.inputError === 'description'
-    )
 
     return (
         <div className="flex">
@@ -137,34 +104,65 @@ const TaskDetailPage = () => {
 
                         <div>
                             <div className="flex w-full flex-col gap-3">
-                                <div className="gap-5 text-start">
-                                    <InputDialog
-                                        label="Nome da Tarefa: "
-                                        id="nameTask"
-                                        placeholder="Digite o nome da tarefa"
-                                        ref={nameTask}
-                                        error={errorName}
-                                        disabled={isLoading}
-                                        defaultValue={detailTask?.title}
+                                <form
+                                    id="form-update"
+                                    onSubmit={handleSubmit(HandleSubmit)}
+                                >
+                                    <div className="gap-5 text-start">
+                                        <InputDialog
+                                            label="Nome da Tarefa: "
+                                            id="nameTask"
+                                            placeholder="Digite o nome da tarefa"
+                                            error={errors?.title}
+                                            disabled={isSubmitting}
+                                            defaultValue={detailTask?.title}
+                                            {...register('title', {
+                                                required: 'Campo é necessário',
+                                                validate: (input) => {
+                                                    if (!input.trim()) {
+                                                        return 'O campo não pode ser vazio'
+                                                    }
+                                                    return true
+                                                },
+                                            })}
+                                        />
+                                    </div>
+                                    <SelectTime
+                                        error={errors?.period}
+                                        disabled={isSubmitting}
+                                        defaultValue={detailTask?.period}
+                                        {...register('period', {
+                                            required: 'Campo é necessário',
+                                            validate: (input) => {
+                                                if (!input.trim()) {
+                                                    return 'O campo não pode ser vazio'
+                                                }
+                                                return true
+                                            },
+                                        })}
                                     />
-                                </div>
-                                <SelectTime
-                                    error={errorPeriod}
-                                    disabled={isLoading}
-                                    defaultValue={detailTask?.period}
-                                    ref={periodTask}
-                                />
-                                <div>
-                                    <InputDialog
-                                        label="Descrição: "
-                                        id="descriptionTask"
-                                        placeholder="Digite o nome da descrição da tarefa"
-                                        error={errorDescription}
-                                        disabled={isLoading}
-                                        defaultValue={detailTask?.description}
-                                        ref={descriptionTask}
-                                    />
-                                </div>
+                                    <div>
+                                        <InputDialog
+                                            label="Descrição: "
+                                            id="descriptionTask"
+                                            placeholder="Digite o nome da descrição da tarefa"
+                                            error={errors?.description}
+                                            disabled={isSubmitting}
+                                            defaultValue={
+                                                detailTask?.description
+                                            }
+                                            {...register('description', {
+                                                required: 'Campo é necessário',
+                                                validate: (input) => {
+                                                    if (!input.trim()) {
+                                                        return 'O campo não pode ser vazio'
+                                                    }
+                                                    return true
+                                                },
+                                            })}
+                                        />
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -172,8 +170,10 @@ const TaskDetailPage = () => {
                 <div className="flex justify-end gap-3">
                     <Button
                         size="sm"
+                        form="form-update"
                         onClick={HandleSubmit}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
+                        type="submit"
                     >
                         Salvar
                     </Button>
