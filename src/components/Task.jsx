@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { toast, Toaster } from 'sonner'
 
 import {
@@ -14,23 +15,22 @@ import TaskItem from './TaskItem.jsx'
 import TaskSeparate from './TaskSeparate.jsx'
 
 const Task = () => {
-    const [tasks, setTask] = useState([])
     const [openDialog, setopenDialog] = useState(false)
-    const morningTask = tasks.filter((task) => task.period === 'morning')
-    const eveningTask = tasks.filter((task) => task.period === 'evening')
-    const afternoonTask = tasks.filter((task) => task.period === 'afternoon')
-
-    useEffect(() => {
-        const fetchData = async () => {
+    const queryClient = useQueryClient()
+    const { data: tasks } = useQuery({
+        queryKey: ['tasks'],
+        queryFn: async () => {
             const data = await fetch('http://localhost:3000/tasks', {
                 method: 'GET',
             })
             const result = await data.json()
+            return result
+        },
+    })
 
-            setTask(result)
-        }
-        fetchData()
-    }, [])
+    const morningTask = tasks?.filter((task) => task.period === 'morning')
+    const eveningTask = tasks?.filter((task) => task.period === 'evening')
+    const afternoonTask = tasks?.filter((task) => task.period === 'afternoon')
 
     const HandleClickCheckBox = (tasksId) => {
         const newTask = tasks.map((task) => {
@@ -49,20 +49,24 @@ const Task = () => {
             }
             return { ...task, status: 'done' }
         })
-        setTask(newTask)
+        queryClient.setQueryData(['tasks'], newTask)
     }
 
     const deletedItem = async (taskId) => {
         if (!taskId) {
             toast.error('Erro ao deletar, é necessário 1 ID')
         }
-        const deletedtask = tasks.filter((task) => taskId !== task.id)
-        setTask(deletedtask)
+        queryClient.setQueryData(['tasks'], (currentTask) => {
+            console.log(currentTask)
+            return currentTask?.filter((task) => taskId !== task.id)
+        })
         toast.success('Item deletado com sucesso!')
     }
 
-    const taskSubmit = (task) => {
-        setTask([...tasks, task])
+    const taskSubmit = async (task) => {
+        queryClient.setQueryData(['tasks'], (oldtasks) => {
+            return [...oldtasks, task]
+        })
         toast.success('Tarefa adicionada!')
     }
 
@@ -99,7 +103,7 @@ const Task = () => {
                 <div className="flex flex-col gap-5 overflow-scroll rounded-xl bg-white p-5">
                     <div className="flex flex-col gap-2">
                         <TaskSeparate img={<IconSun />}> Manhã</TaskSeparate>
-                        {morningTask.map((task, index) => (
+                        {morningTask?.map((task, index) => (
                             <TaskItem
                                 key={index}
                                 task={task}
@@ -110,7 +114,7 @@ const Task = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         <TaskSeparate img={<IconFoggy />}> Tarde</TaskSeparate>
-                        {afternoonTask.map((task, index) => (
+                        {afternoonTask?.map((task, index) => (
                             <TaskItem
                                 key={index}
                                 task={task}
@@ -121,7 +125,7 @@ const Task = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         <TaskSeparate img={<IconMoon />}> Noite</TaskSeparate>
-                        {eveningTask.map((task, index) => (
+                        {eveningTask?.map((task, index) => (
                             <TaskItem
                                 key={index}
                                 task={task}
