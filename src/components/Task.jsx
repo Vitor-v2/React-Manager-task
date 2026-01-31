@@ -1,6 +1,6 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { toast, Toaster } from 'sonner'
+import { Toaster } from 'sonner'
 
 import {
     IconAdd,
@@ -17,6 +17,7 @@ import TaskSeparate from './TaskSeparate.jsx'
 const Task = () => {
     const [openDialog, setopenDialog] = useState(false)
     const queryClient = useQueryClient()
+
     const { data: tasks } = useQuery({
         queryKey: ['tasks'],
         queryFn: async () => {
@@ -52,24 +53,6 @@ const Task = () => {
         queryClient.setQueryData(['tasks'], newTask)
     }
 
-    const deletedItem = async (taskId) => {
-        if (!taskId) {
-            toast.error('Erro ao deletar, é necessário 1 ID')
-        }
-        queryClient.setQueryData(['tasks'], (currentTask) => {
-            console.log(currentTask)
-            return currentTask?.filter((task) => taskId !== task.id)
-        })
-        toast.success('Item deletado com sucesso!')
-    }
-
-    const taskSubmit = async (task) => {
-        queryClient.setQueryData(['tasks'], (oldtasks) => {
-            return [...oldtasks, task]
-        })
-        toast.success('Tarefa adicionada!')
-    }
-
     return (
         <>
             <div className="bg-background-task flex h-screen w-screen flex-col gap-5 px-5 pt-10">
@@ -103,43 +86,60 @@ const Task = () => {
                 <div className="flex flex-col gap-5 overflow-scroll rounded-xl bg-white p-5">
                     <div className="flex flex-col gap-2">
                         <TaskSeparate img={<IconSun />}> Manhã</TaskSeparate>
-                        {morningTask?.map((task, index) => (
-                            <TaskItem
-                                key={index}
-                                task={task}
-                                handleCheckBox={HandleClickCheckBox}
-                                onDelete={deletedItem}
-                            />
-                        ))}
+                        {morningTask?.length > 0 ? (
+                            morningTask.map((task, index) => (
+                                <TaskItem
+                                    key={index}
+                                    task={task}
+                                    handleCheckBox={HandleClickCheckBox}
+                                />
+                            ))
+                        ) : (
+                            <i className="opacity-60">
+                                Nenhuma tarefa cadastrada para o período da
+                                manhã
+                            </i>
+                        )}
                     </div>
                     <div className="flex flex-col gap-2">
                         <TaskSeparate img={<IconFoggy />}> Tarde</TaskSeparate>
-                        {afternoonTask?.map((task, index) => (
-                            <TaskItem
-                                key={index}
-                                task={task}
-                                handleCheckBox={HandleClickCheckBox}
-                                onDelete={deletedItem}
-                            />
-                        ))}
+                        {afternoonTask?.length > 0 ? (
+                            afternoonTask.map((task, index) => (
+                                <TaskItem
+                                    key={index}
+                                    task={task}
+                                    handleCheckBox={HandleClickCheckBox}
+                                />
+                            ))
+                        ) : (
+                            <i className="opacity-60">
+                                Nenhuma tarefa cadastrada para o período da
+                                tarde
+                            </i>
+                        )}
                     </div>
                     <div className="flex flex-col gap-2">
                         <TaskSeparate img={<IconMoon />}> Noite</TaskSeparate>
-                        {eveningTask?.map((task, index) => (
-                            <TaskItem
-                                key={index}
-                                task={task}
-                                handleCheckBox={HandleClickCheckBox}
-                                onDelete={deletedItem}
-                            />
-                        ))}
+                        {eveningTask?.length > 0 ? (
+                            eveningTask.map((task, index) => (
+                                <TaskItem
+                                    key={index}
+                                    task={task}
+                                    handleCheckBox={HandleClickCheckBox}
+                                />
+                            ))
+                        ) : (
+                            <i className="opacity-60">
+                                Nenhuma tarefa cadastrada para o período da
+                                noite
+                            </i>
+                        )}
                     </div>
                 </div>
             </div>
             <CreateDialog
                 isOpen={openDialog}
                 HandleClickClose={setopenDialog}
-                taskSubmit={taskSubmit}
             />
         </>
     )

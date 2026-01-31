@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { toast } from 'sonner'
 
@@ -8,8 +9,21 @@ import TrashIcon from '../assets/IconTrash.svg?react'
 import LoaderIcon from '../assets/loader.svg?react'
 import Button from './Button'
 
-const TaskItem = ({ task, handleCheckBox, onDelete }) => {
-    const [deleteIsLoading, setdeleteIsLoading] = useState(false)
+const TaskItem = ({ task, handleCheckBox }) => {
+    const queryClient = useQueryClient()
+
+    const { mutate, isPending } = useMutation({
+        mutationKey: 'delete-item',
+        mutationFn: async () => {
+            const response = await fetch(
+                `http://localhost:3000/tasks/${task.id}`,
+                {
+                    method: 'DELETE',
+                }
+            )
+            return response.json()
+        },
+    })
 
     const statusClasses = () => {
         if (task.status === 'done') {
@@ -24,18 +38,33 @@ const TaskItem = ({ task, handleCheckBox, onDelete }) => {
     }
 
     const HandleDeleteItem = async () => {
-        setdeleteIsLoading(true)
-        const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-            method: 'DELETE',
+        mutate(undefined, {
+            onSuccess: () => {
+                queryClient.setQueryData(['tasks'], (currentTask) => {
+                    return currentTask.filter(
+                        (currentTask) => task.id !== currentTask?.id
+                    )
+                })
+                toast.info('Item deletado com sucesso')
+            },
+            onError: () => {
+                toast.error('Erro ao excluir a tarefa')
+            },
         })
-        if (!response.ok) {
-            setdeleteIsLoading(false)
-            return toast.error('Erro na ao excluir a tarefa')
-        }
-
-        onDelete(task.id)
-        setdeleteIsLoading(false)
     }
+
+    // const HandleDeleteItem = async () => {
+    //     setdeleteIsLoading(true)
+    //     const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+    //         method: 'DELETE',
+    //     })
+    //     if (!response.ok) {
+    //         setdeleteIsLoading(false)
+    //         return toast.error('Erro na ao excluir a tarefa')
+    //     }
+
+    //     onDelete(task.id)
+    // }
 
     return (
         <>
@@ -71,9 +100,9 @@ const TaskItem = ({ task, handleCheckBox, onDelete }) => {
                             HandleDeleteItem()
                         }}
                         className="cursor-pointer"
-                        disabled={deleteIsLoading}
+                        disabled={isPending}
                     >
-                        {deleteIsLoading ? (
+                        {isPending ? (
                             <LoaderIcon className="animate-spin" />
                         ) : (
                             <TrashIcon className="text-black/60" />
