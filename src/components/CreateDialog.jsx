@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useForm } from 'react-hook-form'
@@ -7,26 +6,13 @@ import { toast } from 'sonner'
 import { v7 as uuidv7 } from 'uuid'
 
 import LoaderIcon from '../assets/loader.svg?react'
+import { useSubmitTask } from '../hooks/data/use-submit-task'
 import Button from './Button'
 import InputDialog from './Input'
 import SelectTime from './SelectTime'
 
 const CreateDialog = ({ isOpen, HandleClickClose }) => {
-    const { mutate, isPending: relodingSaveTask } = useMutation({
-        mutationKey: 'submit-task',
-        mutationFn: async (task) => {
-            const response = await fetch('http://localhost:3000/tasks', {
-                method: 'POST',
-                body: JSON.stringify(task),
-            })
-            if (!response.ok) {
-                throw new Error()
-            }
-
-            return response.json()
-        },
-    })
-
+    const { mutate: AddTask, isPending: relodingSaveTask } = useSubmitTask()
     const {
         handleSubmit,
         register,
@@ -36,7 +22,6 @@ const CreateDialog = ({ isOpen, HandleClickClose }) => {
         defaultValues: { title: '', period: 'morning', description: '' },
     })
     const nodeRef = useRef()
-    const queryClient = useQueryClient()
 
     const HandleCloseTask = () => {
         reset()
@@ -52,11 +37,8 @@ const CreateDialog = ({ isOpen, HandleClickClose }) => {
             status: 'not_started',
         }
 
-        mutate(task, {
+        AddTask(task, {
             onSuccess: () => {
-                queryClient.setQueryData(['tasks'], (currentTask) => {
-                    return [...currentTask, task]
-                })
                 toast.success('Tarefa adicionada!')
                 reset()
                 HandleClickClose()

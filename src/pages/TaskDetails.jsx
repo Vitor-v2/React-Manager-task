@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router'
@@ -10,6 +10,9 @@ import Button from '../components/Button'
 import InputDialog from '../components/Input'
 import SelectTime from '../components/SelectTime'
 import SideBar from '../components/SideBar'
+import { useDeleteTask } from '../hooks/data/use-delete-task'
+import { useGetTask } from '../hooks/data/use-get-task'
+import { useUpdateTask } from '../hooks/data/use-update-taks'
 
 const TaskDetailPage = () => {
     const { taskId } = useParams()
@@ -22,62 +25,13 @@ const TaskDetailPage = () => {
     } = useForm({
         defaultValues: { title: '', period: 'morning', description: '' },
     })
-
     const navigate = useNavigate()
 
-    const { data: detailTask } = useQuery({
-        queryKey: ['getTaskDetail'],
-        queryFn: async () => {
-            const response = await fetch(
-                `http://localhost:3000/tasks/${taskId}`,
-                {
-                    method: 'GET',
-                }
-            )
-            const data = await response.json()
-            reset(data)
-            return data
-        },
-    })
-
-    const { mutate: deleteMutate, isPending: reloadingDelete } = useMutation({
-        mutationKey: ['deleteTask'],
-        mutationFn: async () => {
-            const deleteTask = await fetch(
-                `http://localhost:3000/tasks/${taskId}`,
-                {
-                    method: 'DELETE',
-                }
-            )
-            if (!deleteTask.ok) {
-                return toast.error('Erro ao deletar a Tarefa ')
-            }
-            return deleteTask.json()
-        },
-    })
-
-    const { mutate: updateMutate, isPending: submitLoading } = useMutation({
-        mutationKey: ['updateTask'],
-        mutationFn: async (taskUpdate) => {
-            const submitTask = await fetch(
-                `http://localhost:3000/tasks/${taskId}`,
-                {
-                    method: 'PATCH',
-                    body: JSON.stringify({
-                        title: taskUpdate.title.trim(),
-                        period: taskUpdate.period.trim(),
-                        description: taskUpdate.description.trim(),
-                    }),
-                }
-            )
-            if (!submitTask.ok) {
-                return toast.error('Erro ao atualizar a Tarefa ')
-            }
-
-            const task = await submitTask.json()
-            return task
-        },
-    })
+    const { data: detailTask } = useGetTask(taskId, reset)
+    const { mutate: deleteMutate, isPending: reloadingDelete } =
+        useDeleteTask(taskId)
+    const { mutate: updateMutate, isPending: submitLoading } =
+        useUpdateTask(taskId)
 
     const HandleBack = () => {
         reset()
@@ -104,34 +58,15 @@ const TaskDetailPage = () => {
         const period = dataUpdate.period
         const description = dataUpdate.description
 
-        // const submitTask = await fetch(
-        //     `http://localhost:3000/tasks/${detailTask.id}`,
-        //     {
-        //         method: 'PATCH',
-        //         body: JSON.stringify({ title, period, description }),
-        //     }
-        // )
         const submitTask = { title, period, description }
-        // const data = await submitTask.json()
-
-        // if (!submitTask.ok) {
-        //     return toast.error('Erro ao atualizar a Tarefa ')
-
-        // }
 
         updateMutate(submitTask, {
-            onSuccess: (task) => {
-                queryClient.setQueryData(['getTaskDetail'], (oldTasks) => {
-                    if (oldTasks.id === task.id) {
-                        return task
-                    }
-                    return oldTasks
-                })
+            onSuccess: () => {
                 navigate(-1)
                 toast.success('Tarefa alterada')
             },
             onError: () => {
-                throw new Error()
+                throw new Error('Não foi possível atualizar esta tarefa')
             },
         })
     }
