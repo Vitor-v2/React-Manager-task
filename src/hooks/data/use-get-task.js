@@ -1,16 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { mutationkeys } from '../../key/mutations'
+import { api } from '../axios/axios'
+
 export const useGetTask = (taskId, reset) => {
     return useQuery({
-        queryKey: ['getTaskDetail'],
+        queryKey: mutationkeys.getTask(),
         queryFn: async () => {
-            const response = await fetch(
-                `http://localhost:3000/tasks/${taskId}`,
-                {
-                    method: 'GET',
-                }
-            )
-            const data = await response.json()
+            const { data } = await api.get(`tasks/${taskId}`)
             reset(data)
             return data
         },

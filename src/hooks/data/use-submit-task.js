@@ -1,26 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { mutationkeys } from '../../key/mutations'
+import { queryTaskKeys } from '../../key/queriesTaskKeys'
+import { api } from '../axios/axios'
+
 export const useSubmitTask = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationKey: 'submit-task',
+        mutationKey: mutationkeys.submitTask(),
         mutationFn: async (task) => {
-            const response = await fetch('http://localhost:3000/tasks', {
-                method: 'POST',
-                body: JSON.stringify(task),
-            })
-            if (!response.ok) {
-                throw new Error()
-            }
-
-            const taskCreated = await response.json()
-
-            return taskCreated
+            const { data } = await api.post('/tasks', task)
+            return data
         },
 
         onSuccess: (taskCreated) => {
-            queryClient.setQueryData(['tasks'], (currentTask) => {
+            queryClient.setQueryData(queryTaskKeys.getAll(), (currentTask) => {
                 return [...currentTask, taskCreated]
             })
         },

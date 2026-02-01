@@ -6,7 +6,7 @@ function SideBarButtons({ icon, children, url }) {
         base: 'flex items-center gap-2 rounded-lg px-3 py-3',
         variants: {
             color: {
-                selected: 'bg-primary-color/70  text-white animate-pulse',
+                selected: 'bg-primary-color/70  text-white',
                 unselected: 'text-brand-dark-blue',
             },
         },
