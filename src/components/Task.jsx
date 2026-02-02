@@ -12,6 +12,7 @@ import {
 import { useGetTasks } from '../hooks/data/use-get-tasks.js'
 import Button from './Button.jsx'
 import CreateDialog from './CreateDialog.jsx'
+import { Header } from './Header.jsx'
 import TaskItem from './TaskItem.jsx'
 import TaskSeparate from './TaskSeparate.jsx'
 
@@ -54,25 +55,15 @@ const Task = () => {
                     theme="system"
                     richColors="true"
                 />
-                <div className="rounded-xl bg-white p-5">
-                    <p className="text-primary-color font-[Poppins] text-sm">
-                        Minhas tarefas
-                    </p>
-                    <div className="flex justify-between">
-                        <p className="content-center font-[Poppins] text-xl">
-                            Minhas Tarefas
-                        </p>
-                        <div className="flex items-center gap-5">
-                            <Button variant="ghost">
-                                <IconTrash /> Limpar Tarefa
-                            </Button>
-                            <Button onClick={() => setopenDialog(true)}>
-                                <IconAdd />
-                                Nova Tarefa
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                <Header>
+                    <Button variant="ghost">
+                        <IconTrash /> Limpar Tarefa
+                    </Button>
+                    <Button onClick={() => setopenDialog(true)}>
+                        <IconAdd />
+                        Nova Tarefa
+                    </Button>
+                </Header>
 
                 {/* TASKS */}
                 <div className="flex flex-col gap-5 overflow-scroll rounded-xl bg-white p-5">

@@ -5,7 +5,8 @@
 
 @theme {
     --color-default-button: #00BCD4;
-    --color-background-task: #f0f4f6;
+    --color-background-task: #f0f5f3;
     --color-primary-color: #00BCD4;
     --color-secondary-color: #00838F;
+    --color-card: white;
 }
