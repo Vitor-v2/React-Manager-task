@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { mutationkeys } from '../../key/mutations'
+import { queryTaskKeys } from '../../key/queriesTaskKeys'
 import { api } from '../axios/axios'
 
 export const useGetTasks = () => {
     return useQuery({
-        queryKey: mutationkeys.getTasks(),
+        queryKey: queryTaskKeys.getAll(),
         queryFn: async () => {
             const { data: result } = await api.get('/tasks')
             return result

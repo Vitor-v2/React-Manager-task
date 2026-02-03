@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Toaster } from 'sonner'
 
@@ -12,13 +11,12 @@ import {
 import { useGetTasks } from '../hooks/data/use-get-tasks.js'
 import Button from './Button.jsx'
 import CreateDialog from './CreateDialog.jsx'
-import { Header } from './Header.jsx'
+import Header from './Header.jsx'
 import TaskItem from './TaskItem.jsx'
 import TaskSeparate from './TaskSeparate.jsx'
 
 const Task = () => {
     const [openDialog, setopenDialog] = useState(false)
-    const queryClient = useQueryClient()
 
     const { data: tasks } = useGetTasks()
 
@@ -26,25 +24,25 @@ const Task = () => {
     const eveningTask = tasks?.filter((task) => task.period === 'evening')
     const afternoonTask = tasks?.filter((task) => task.period === 'afternoon')
 
-    const HandleClickCheckBox = (tasksId) => {
-        const newTask = tasks.map((task) => {
-            if (tasksId !== task.id) {
-                return task
-            }
+    // const HandleClickCheckBox = (tasksId) => {
+    //     const newTask = tasks.map((task) => {
+    //         if (tasksId !== task.id) {
+    //             return task
+    //         }
 
-            if (task.status === 'done') {
-                return { ...task, status: 'in_progress' }
-            }
-            if (task.status === 'in_progress') {
-                return { ...task, status: 'not_started' }
-            }
-            if (task.status === 'not_started') {
-                return { ...task, status: 'done' }
-            }
-            return { ...task, status: 'done' }
-        })
-        queryClient.setQueryData(['tasks'], newTask)
-    }
+    //         if (task.status === 'done') {
+    //             return { ...task, status: 'in_progress' }
+    //         }
+    //         if (task.status === 'in_progress') {
+    //             return { ...task, status: 'not_started' }
+    //         }
+    //         if (task.status === 'not_started') {
+    //             return { ...task, status: 'done' }
+    //         }
+    //         return { ...task, status: 'done' }
+    //     })
+    //     queryClient.setQueryData(['tasks'], newTask)
+    // }
 
     return (
         <>
@@ -71,11 +69,7 @@ const Task = () => {
                         <TaskSeparate img={<IconSun />}> Manhã</TaskSeparate>
                         {morningTask?.length > 0 ? (
                             morningTask.map((task, index) => (
-                                <TaskItem
-                                    key={index}
-                                    task={task}
-                                    handleCheckBox={HandleClickCheckBox}
-                                />
+                                <TaskItem key={index} task={task} />
                             ))
                         ) : (
                             <i className="opacity-60">
@@ -88,11 +82,7 @@ const Task = () => {
                         <TaskSeparate img={<IconFoggy />}> Tarde</TaskSeparate>
                         {afternoonTask?.length > 0 ? (
                             afternoonTask.map((task, index) => (
-                                <TaskItem
-                                    key={index}
-                                    task={task}
-                                    handleCheckBox={HandleClickCheckBox}
-                                />
+                                <TaskItem key={index} task={task} />
                             ))
                         ) : (
                             <i className="opacity-60">
@@ -105,11 +95,7 @@ const Task = () => {
                         <TaskSeparate img={<IconMoon />}> Noite</TaskSeparate>
                         {eveningTask?.length > 0 ? (
                             eveningTask.map((task, index) => (
-                                <TaskItem
-                                    key={index}
-                                    task={task}
-                                    handleCheckBox={HandleClickCheckBox}
-                                />
+                                <TaskItem key={index} task={task} />
                             ))
                         ) : (
                             <i className="opacity-60">

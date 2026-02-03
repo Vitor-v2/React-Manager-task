@@ -6,12 +6,15 @@ import ShareIcon from '../assets/IconShare.svg?react'
 import TrashIcon from '../assets/IconTrash.svg?react'
 import LoaderIcon from '../assets/loader.svg?react'
 import { useDeleteTask } from '../hooks/data/use-delete-task'
+import { useUpdateTask } from '../hooks/data/use-update-taks'
 import Button from './Button'
 
-const TaskItem = ({ task, handleCheckBox }) => {
+const TaskItem = ({ task }) => {
     const { mutate: deleteTask, isPending: relodingDeleteTask } = useDeleteTask(
         task.id
     )
+
+    const { mutate: updateTask } = useUpdateTask(task.id)
 
     const statusClasses = () => {
         if (task.status === 'done') {
@@ -36,6 +39,32 @@ const TaskItem = ({ task, handleCheckBox }) => {
         })
     }
 
+    const getStatus = () => {
+        if (task.status === 'not_started') {
+            return 'in_progress'
+        }
+        if (task.status === 'in_progress') {
+            return 'done'
+        }
+        return 'not_started'
+    }
+
+    const HandleClickCheckBox = () => {
+        updateTask(
+            {
+                status: getStatus(),
+            },
+            {
+                onSuccess: () => toast.success('Status alterado'),
+                onError: (error) => {
+                    console.log(error)
+                },
+            }
+        )
+
+        //     queryClient.setQueryData(['tasks'], newTask)
+    }
+
     return (
         <>
             <div
@@ -54,9 +83,7 @@ const TaskItem = ({ task, handleCheckBox }) => {
                         <input
                             type="checkbox"
                             className="absolute h-full w-full cursor-pointer opacity-0"
-                            onChange={() => {
-                                handleCheckBox(task.id)
-                            }}
+                            onChange={HandleClickCheckBox}
                         />
                     </label>
                     {task.title}

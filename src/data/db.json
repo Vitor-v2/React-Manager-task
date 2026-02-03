@@ -1,64 +1,25 @@
 {
   "tasks": [
     {
-      "id": "11",
-      "title": "Cozinhar",
-      "description": "Preparar o jantar",
-      "period": "evening",
-      "status": "done"
-    },
-    {
-      "id": "13",
-      "title": "Fazer exercícios",
-      "description": "Correr no parque",
+      "id": "019c20f4-a7e9-7109-b4fe-02c446977077",
+      "title": "teste2",
       "period": "afternoon",
-      "status": "done"
-    },
-    {
-      "id": "16",
-      "title": "Assistir aula",
-      "description": "Participar da aula de programação",
-      "period": "afternoon",
-      "status": "in_progress"
-    },
-    {
-      "id": "17",
-      "title": "Fazer backup",
-      "description": "Fazer backup dos arquivos importantes",
-      "period": "evening",
-      "status": "not_started"
-    },
-    {
-      "id": "019c0b19-c3cb-70a8-8d63-d0faf989e71b",
-      "status": "not_started"
-    },
-    {
-      "id": "019c0ed4-03d5-73bc-a65d-a7d5f04d1f5e",
-      "title": "asdas",
-      "period": "asdas",
-      "description": "asdas",
-      "status": "not_started"
-    },
-    {
-      "id": "019c1aaa-c87c-72e8-9ff1-95a5b33e97fa",
-      "title": "afsd",
-      "period": "morning",
-      "description": "asdadas",
-      "status": "not_started"
-    },
-    {
-      "id": "019c1b1a-0906-74dc-9675-a70b72249716",
-      "title": "asdasd",
-      "period": "morning",
-      "description": "asdasdas",
-      "status": "not_started"
-    },
-    {
-      "id": "019c1b22-cf97-77f5-9a11-37ac026f6388",
-      "title": "aaa",
-      "period": "morning",
       "description": "aaaa",
       "status": "not_started"
+    },
+    {
+      "id": "019c21b4-593e-723e-8707-416dca6be34e",
+      "title": "aa234",
+      "period": "morning",
+      "description": "aaa",
+      "status": "done"
+    },
+    {
+      "id": "019c21bc-8eec-73d0-b541-77391498f9f4",
+      "title": "notates",
+      "period": "morning",
+      "description": "aaa",
+      "status": "in_progress"
     }
   ]
 }

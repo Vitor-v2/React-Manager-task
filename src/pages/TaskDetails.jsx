@@ -44,11 +44,11 @@ const TaskDetailPage = () => {
                 queryClient.setQueryData(['getTaskDetail'], (oldTasks) => {
                     taskId !== oldTasks.id
                 })
-                navigate(-1)
+                // navigate(-1)
                 toast.success('Tarefa deletada com sucesso!')
             },
-            onError: () => {
-                throw new Error()
+            onError: (error) => {
+                throw new Error(error)
             },
         })
     }
@@ -58,15 +58,15 @@ const TaskDetailPage = () => {
         const period = dataUpdate.period
         const description = dataUpdate.description
 
-        const submitTask = { title, period, description }
+        const updateTask = { title, period, description }
 
-        updateMutate(submitTask, {
+        updateMutate(updateTask, {
             onSuccess: () => {
-                navigate(-1)
+                // navigate(-1)
                 toast.success('Tarefa alterada')
             },
-            onError: () => {
-                throw new Error('Não foi possível atualizar esta tarefa')
+            onError: (error) => {
+                throw new Error(error)
             },
         })
     }

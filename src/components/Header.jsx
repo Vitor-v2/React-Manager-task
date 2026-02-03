@@ -1,4 +1,4 @@
-export const Header = ({ children }) => {
+const Header = ({ children }) => {
     return (
         <div className="rounded-xl bg-white p-5">
             <p className="text-primary-color font-[Poppins] text-sm">
@@ -13,3 +13,5 @@ export const Header = ({ children }) => {
         </div>
     )
 }
+
+export default Header
