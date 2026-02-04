@@ -56,13 +56,11 @@ const TaskItem = ({ task }) => {
             },
             {
                 onSuccess: () => toast.success('Status alterado'),
-                onError: (error) => {
-                    console.log(error)
+                onError: () => {
+                    toast.error('Erro ao atualizar a tarefa')
                 },
             }
         )
-
-        //     queryClient.setQueryData(['tasks'], newTask)
     }
 
     return (

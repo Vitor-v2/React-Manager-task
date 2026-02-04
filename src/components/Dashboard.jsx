@@ -2,17 +2,18 @@ import { useState } from 'react'
 
 import {
     IconAdd,
-    IconCheck,
-    IconGlass,
+    IconCardList,
     IconList,
+    IconListChecked,
     IconLoading,
-    IconTrash,
 } from '../assets/Icons'
 import { useGetTasks } from '../hooks/data/use-get-tasks'
 import Button from './Button'
 import CreateDialog from './CreateDialog'
 import DashBoardCard from './DashboardCard'
 import Header from './Header'
+import TaskItem from './TaskItem'
+import TaskSeparate from './TaskSeparate'
 
 export const DashBoard = () => {
     const [openDialog, setopenDialog] = useState(false)
@@ -26,13 +27,21 @@ export const DashBoard = () => {
         (task) => task.status === 'not_started'
     ).length
 
+    const taskInProgressInList = data?.map((task) =>
+        task.status === 'in_progress' ? (
+            <TaskItem key={task.id} task={task} />
+        ) : null
+    )
+    const taskNotStartedInList = data?.map((task) =>
+        task.status === 'not_started' ? (
+            <TaskItem key={task.id} task={task} />
+        ) : null
+    )
+
     return (
         <>
             <div className="bg-background-task flex h-screen w-screen flex-col gap-5 px-5 pt-10">
                 <Header>
-                    <Button variant="ghost">
-                        <IconTrash /> Limpar Tarefa
-                    </Button>
                     <Button onClick={() => setopenDialog(true)}>
                         <IconAdd />
                         Nova Tarefa
@@ -40,14 +49,19 @@ export const DashBoard = () => {
                 </Header>
                 <div className="flex justify-between">
                     <DashBoardCard
-                        icon={<IconList className="text-primary-color" />}
-                        mainName={taskNotStarted}
-                        secondName="Tarefas Disponíveis"
+                        icon={
+                            <IconList className="text-primary-color animate-pulse" />
+                        }
+                        mainName={data?.length}
+                        secondName="Tarefas Totais"
                     />
+
                     <DashBoardCard
-                        icon={<IconCheck className="text-primary-color" />}
-                        mainName={taskCompleted}
-                        secondName="Tarefas concluídas"
+                        icon={
+                            <IconLoading className="text-primary-color animate-spin" />
+                        }
+                        mainName={taskNotStarted}
+                        secondName="Tarefas não iniciadas"
                     />
                     <DashBoardCard
                         icon={
@@ -57,10 +71,47 @@ export const DashBoard = () => {
                         secondName="Tarefas em andamento"
                     />
                     <DashBoardCard
-                        icon={<IconGlass />}
-                        mainName="50%"
-                        secondName="Água"
+                        icon={
+                            <IconListChecked className="text-primary-color animate-pulse" />
+                        }
+                        mainName={taskCompleted}
+                        secondName="Tarefas concluídas"
                     />
+                </div>
+                <div className="grid grid-cols-2 gap-5">
+                    <div className="flex h-full flex-col gap-5 rounded-xl bg-white p-5">
+                        <TaskSeparate
+                            img={<IconCardList className="text-gray-500" />}
+                            children="Tarefas não iniciadas"
+                        />
+                        <div className="flex flex-col gap-2">
+                            {!taskNotStartedInList ? (
+                                <i>
+                                    Nenhuma tarefa cadastrada para o período da
+                                    manhã
+                                </i>
+                            ) : (
+                                taskNotStartedInList
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="flex h-full flex-col gap-5 rounded-xl bg-white p-5">
+                        <TaskSeparate
+                            img={<IconCardList className="text-gray-500" />}
+                            children="Tarefas em progresso"
+                        />
+                        <div className="flex flex-col gap-2">
+                            {!taskInProgressInList ? (
+                                <i>
+                                    Nenhuma tarefa cadastrada para o período da
+                                    manhã
+                                </i>
+                            ) : (
+                                taskInProgressInList
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
             <CreateDialog

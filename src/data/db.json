@@ -1,25 +1,3 @@
 {
-  "tasks": [
-    {
-      "id": "019c20f4-a7e9-7109-b4fe-02c446977077",
-      "title": "teste2",
-      "period": "afternoon",
-      "description": "aaaa",
-      "status": "not_started"
-    },
-    {
-      "id": "019c21b4-593e-723e-8707-416dca6be34e",
-      "title": "aa234",
-      "period": "morning",
-      "description": "aaa",
-      "status": "done"
-    },
-    {
-      "id": "019c21bc-8eec-73d0-b541-77391498f9f4",
-      "title": "notates",
-      "period": "morning",
-      "description": "aaa",
-      "status": "in_progress"
-    }
-  ]
+  "tasks": []
 }

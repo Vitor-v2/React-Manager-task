@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Toaster } from 'sonner'
+import { toast, Toaster } from 'sonner'
 
 import {
     IconAdd,
@@ -8,6 +8,7 @@ import {
     IconSun,
     IconTrash,
 } from '../assets/Icons.js'
+import { useDeleteAllTasks } from '../hooks/data/use-delete-alltasks.js'
 import { useGetTasks } from '../hooks/data/use-get-tasks.js'
 import Button from './Button.jsx'
 import CreateDialog from './CreateDialog.jsx'
@@ -19,34 +20,22 @@ const Task = () => {
     const [openDialog, setopenDialog] = useState(false)
 
     const { data: tasks } = useGetTasks()
+    const { mutate } = useDeleteAllTasks()
 
     const morningTask = tasks?.filter((task) => task.period === 'morning')
     const eveningTask = tasks?.filter((task) => task.period === 'evening')
     const afternoonTask = tasks?.filter((task) => task.period === 'afternoon')
 
-    // const HandleClickCheckBox = (tasksId) => {
-    //     const newTask = tasks.map((task) => {
-    //         if (tasksId !== task.id) {
-    //             return task
-    //         }
-
-    //         if (task.status === 'done') {
-    //             return { ...task, status: 'in_progress' }
-    //         }
-    //         if (task.status === 'in_progress') {
-    //             return { ...task, status: 'not_started' }
-    //         }
-    //         if (task.status === 'not_started') {
-    //             return { ...task, status: 'done' }
-    //         }
-    //         return { ...task, status: 'done' }
-    //     })
-    //     queryClient.setQueryData(['tasks'], newTask)
-    // }
+    const HandleDeleteAll = () => {
+        mutate(tasks, {
+            onSuccess: () => toast.success('Lista limpa'),
+            onError: () => toast.error('Erro ao limpar a lista de tarefas.'),
+        })
+    }
 
     return (
         <>
-            <div className="bg-background-task flex h-screen w-screen flex-col gap-5 px-5 pt-10">
+            <div className="bg-background-task flex h-screen w-screen flex-col gap-5 px-5 pt-5">
                 <Toaster
                     expand="true"
                     visibleToasts={1}
@@ -54,7 +43,12 @@ const Task = () => {
                     richColors="true"
                 />
                 <Header>
-                    <Button variant="ghost">
+                    <Button
+                        variant="ghost"
+                        onClick={() => {
+                            HandleDeleteAll()
+                        }}
+                    >
                         <IconTrash /> Limpar Tarefa
                     </Button>
                     <Button onClick={() => setopenDialog(true)}>

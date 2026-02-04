@@ -17,12 +17,6 @@ export const useUpdateTask = (taskId) => {
                 description: taskUpdate.description?.trim(),
                 status: taskUpdate.status,
             })
-
-            // if (!submitTask.ok) {
-            //     throw new Error('Erro ao atualizar a Tarefa ')
-            // }
-
-            // const task = await submitTask.json()
             queryClient.setQueryData(queryTaskKeys.getAll(), (oldTasks) => {
                 return oldTasks.map((oldTask) => {
                     if (oldTask.id == taskId) {
