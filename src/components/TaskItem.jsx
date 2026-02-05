@@ -1,10 +1,7 @@
 import { Link } from 'react-router'
 import { toast } from 'sonner'
 
-import CheckIcon from '../assets/check.svg?react'
-import ShareIcon from '../assets/IconShare.svg?react'
-import TrashIcon from '../assets/IconTrash.svg?react'
-import LoaderIcon from '../assets/loader.svg?react'
+import { IconCheck, IconLoading, IconShare, IconTrash } from '../assets/Icons'
 import { useDeleteTask } from '../hooks/data/use-delete-task'
 import { useUpdateTask } from '../hooks/data/use-update-taks'
 import Button from './Button'
@@ -73,10 +70,10 @@ const TaskItem = ({ task }) => {
                         className={`relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg delay-75 ${statusClasses()}`}
                     >
                         {task.status === 'done' ? (
-                            <CheckIcon className="text-white" />
+                            <IconCheck className="text-white" />
                         ) : null}
                         {task.status === 'in_progress' ? (
-                            <LoaderIcon className="animate-spin text-white" />
+                            <IconLoading className="animate-spin text-white" />
                         ) : null}
                         <input
                             type="checkbox"
@@ -98,13 +95,13 @@ const TaskItem = ({ task }) => {
                         disabled={relodingDeleteTask}
                     >
                         {relodingDeleteTask ? (
-                            <LoaderIcon className="animate-spin" />
+                            <IconLoading className="animate-spin" />
                         ) : (
-                            <TrashIcon className="text-black/60" />
+                            <IconTrash className="text-black/60" />
                         )}
                     </Button>
                     <Link to={`/tasks/${task.id}`}>
-                        <ShareIcon className="text-black/60" />
+                        <IconShare className="text-black/60" />
                     </Link>
                 </div>
             </div>

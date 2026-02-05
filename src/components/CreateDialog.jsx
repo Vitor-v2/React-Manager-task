@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group'
 import { toast } from 'sonner'
 import { v7 as uuidv7 } from 'uuid'
 
-import LoaderIcon from '../assets/loader.svg?react'
+import { IconLoading } from '../assets/Icons.js'
 import { useSubmitTask } from '../hooks/data/use-submit-task'
 import Button from './Button'
 import InputDialog from './Input'
@@ -150,7 +150,7 @@ const CreateDialog = ({ isOpen, HandleClickClose }) => {
                                     disabled={relodingSaveTask}
                                 >
                                     {relodingSaveTask ? (
-                                        <LoaderIcon className="animate-spin text-white" />
+                                        <IconLoading className="animate-spin text-white" />
                                     ) : null}{' '}
                                     Adicionar
                                 </Button>
